@@ -7,6 +7,7 @@ setup(
     version=json.load(open('pkg_info.json'))['__version__'],
     author=['Joseíto Júnior'],
     python_requires='>3.8',
+    url='https://github.com/JoseitoOliveira/logol',
     license='MIT',
     classifiers=[
         'Programming Language :: Python :: 3.8',
