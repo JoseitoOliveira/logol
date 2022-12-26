@@ -1,1 +1,0 @@
-from logol.logol import *

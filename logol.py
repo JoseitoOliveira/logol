@@ -1,3 +1,5 @@
+"""Pre-configured logs"""
+__version__ = '0.0.3'
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -5,6 +7,7 @@ from logging import Logger
 from typing import Dict, Optional
 from time import time_ns
 from pathlib import Path
+
 
 FORMAT_LOGGER = '%(asctime)s [%(filename)s@%(threadName)s] %(levelname)-8s -> %(message)s'
 FORMAT_PRINTER = '%(asctime)s @%(threadName)s -> %(message)s'
@@ -36,12 +39,13 @@ def __default_logger(name, logpath, filesize_mb):
 
     return logger
 
-def __default_printer(filename, filesize_mb=5):
+def __default_printer(filename, filesize_mb=5, base_path=BASE_PATH):
     logger = logging.getLogger(str(time_ns()))
     logger.setLevel(logging.DEBUG)
     
     filename = Path(filename)
-    logpath = Path(BASE_PATH) / filename.relative_to(filename.anchor)
+    print(base_path)
+    logpath = Path(base_path) / filename.relative_to(filename.anchor)
     logpath.parent.mkdir(parents=True, exist_ok=True)
 
     logpath = logpath.with_suffix('.log')
