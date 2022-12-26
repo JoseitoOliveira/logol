@@ -1,5 +1,5 @@
 """Pre-configured logs"""
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -39,13 +39,12 @@ def __default_logger(name, logpath, filesize_mb):
 
     return logger
 
-def __default_printer(filename, filesize_mb=5, base_path=BASE_PATH):
+def __default_printer(filename, filesize_mb=5):
     logger = logging.getLogger(str(time_ns()))
     logger.setLevel(logging.DEBUG)
     
     filename = Path(filename)
-    print(base_path)
-    logpath = Path(base_path) / filename.relative_to(filename.anchor)
+    logpath = Path(BASE_PATH) / filename.relative_to(filename.anchor)
     logpath.parent.mkdir(parents=True, exist_ok=True)
 
     logpath = logpath.with_suffix('.log')
