@@ -1,7 +1,7 @@
 import logol
 from logol import get_print_debug, get_logger
+
 logol.BASE_PATH = '.'
-logol.logol.BASE_PATH = '.'
 print(logol.BASE_PATH)
 print, debug = get_print_debug(__file__)
 print('Olá mundo!')
@@ -18,3 +18,7 @@ except ZeroDivisionError:
 log.error('Error')
 log.critical('Critical')
 
+log2 = get_logger('test', 'test.log', force=True)
+log2.info('Log reconfigurado')
+
+log3 = get_logger('test', 'test.log')

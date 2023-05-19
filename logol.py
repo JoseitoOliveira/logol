@@ -17,8 +17,7 @@ __loggers: Dict[str, Logger] = {}
 __printers: Dict[str, Logger] = {}
 
 
-def __default_logger(name, logpath, filesize_mb):
-    logger = logging.getLogger(name)
+def __configure_logger(logger, logpath, filesize_mb):
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter(fmt=FORMAT_LOGGER, datefmt='%d/%b/%y %H:%M:%S')
@@ -65,12 +64,12 @@ def __default_printer(filename, filesize_mb=5):
     return logger
 
 def remove_handlers(logger):
-    for hdlr in logger.handlers:
-        logger.removeHandler(hdlr)
+    while len(logger.handlers) != 0:
+        logger.removeHandler(logger.handlers[0])
     
     return logger
 
-def get_logger(name, logpath=None, filesize_mb:Optional[int]=None):
+def get_logger(name, logpath=None, filesize_mb:Optional[int]=None, force:bool=False):
     """Get a Logger object from the logging module partly configured.
 
     Args:
@@ -81,13 +80,22 @@ def get_logger(name, logpath=None, filesize_mb:Optional[int]=None):
     Returns:
         Logger: A Logger object from the logging module.
     """
-    if name in __loggers:
-        logger = __loggers[name]
-        logger.warn(f'Trying to create a log with {logpath=} and {filesize_mb=} but a log with name {name} already exists.')
-        return logger
-    else:
-        logger = __default_logger(name, logpath, filesize_mb)
+
+    if name not in __loggers:
+        logger = logging.getLogger(name)
+        logger = __configure_logger(logger, logpath, filesize_mb)
         __loggers[name] = logger
+        return logger
+    elif force:
+        logger = __loggers[name]
+        logger.warning(f'Reconfiguring the log called {name} to {logpath=}, {filesize_mb=}')
+        logger = remove_handlers(logger)
+        logger = __configure_logger(logger, logpath, filesize_mb)
+        return logger
+    else:   
+        logger = __loggers[name]
+        logger.warn(f'Trying to create a log with {logpath=} and {filesize_mb=}  but a log '
+                    f'with name {name} already exists. To force this operatin use force=True')
         return logger
 
 
