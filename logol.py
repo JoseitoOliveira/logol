@@ -1,5 +1,5 @@
 """Pre-configured logs"""
-__version__ = '0.0.4'
+__version__ = '0.0.6'
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -49,7 +49,7 @@ def __default_printer(filename, filesize_mb=5):
     logpath = logpath.with_suffix('.log')
     
     formatter = logging.Formatter(fmt=FORMAT_PRINTER, datefmt='%d/%b/%y %H:%M:%S')
-    logfile = RotatingFileHandler(logpath, mode='a', encoding='utf-8', maxBytes=filesize_mb*1024*1024)
+    logfile = RotatingFileHandler(logpath, mode='a', encoding='utf-8', maxBytes=filesize_mb*1024*1024, backupCount=1)
 
     logfile.setLevel(logging.DEBUG)
     logfile.setFormatter(formatter)
